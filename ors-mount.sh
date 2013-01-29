@@ -34,3 +34,4 @@ fi;
     sed "s%/sdcard%/INT_PATTERN%g" -i /cache/recovery/openrecoveryscript;
     sed "s%/EXT_PATTERN%"$EXT_SD"%g" -i /cache/recovery/openrecoveryscript;
     sed "s%/INT_PATTERN%"$INT_SD"%g" -i /cache/recovery/openrecoveryscript;
+    sed 's/\/mnt\/sdcard/\/sdcard/g' -i /cache/recovery/openrecoveryscript;

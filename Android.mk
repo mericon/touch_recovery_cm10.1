@@ -241,7 +241,6 @@ LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 LOCAL_SRC_FILES := change_ba.sh
 include $(BUILD_PREBUILT)
 
-ifeq ($(INCLUDE_ORS_MOUNT), true)
 include $(CLEAR_VARS)
 LOCAL_MODULE := ors-mount.sh
 LOCAL_MODULE_TAGS := optional
@@ -249,7 +248,6 @@ LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 LOCAL_SRC_FILES := ors-mount.sh
 include $(BUILD_PREBUILT)
-endif
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := kernel-backup.sh
