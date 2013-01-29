@@ -43,6 +43,7 @@
 #include "cutils/android_reboot.h"
 #include "kyle.h"
 #include "device_config.h"
+
 int signature_check_enabled = 1;
 int script_assert_enabled = 0;
 static const char *SDCARD_UPDATE_FILE = "/sdcard/update.zip";
@@ -95,6 +96,15 @@ toggle_signature_check()
 int install_zip(const char* packagefilepath)
 {
     ui_print("\n-- Installing: %s\n", packagefilepath);
+#ifdef KYLE_TOUCH_RECOVERY
+    ensure_path_mounted("/sdcard"); //mount sdcard to access DISABLE_ASSERT_FILE
+    if (quick_toggle_chk(DISABLE_ASSERT_FILE, 0)) {
+	ui_print("Removing assert check...");
+	char tmp[PATH_MAX];
+	sprintf(tmp, "no-assert.sh %s", packagefilepath);
+	__system(tmp);
+    }
+#endif
     if (device_flash_type() == MTD) {
         set_sdcard_update_bootloader_message();
     }

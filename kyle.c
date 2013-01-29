@@ -920,9 +920,6 @@ void show_extras_menu()
                 break;
 	    case 5:
                 {
-#ifdef BOARD_HAS_REMOVABLE_STORAGE
-		    __system("ors-mount.sh");
-#endif
                     //search in default ors path
                     choose_default_ors_menu("/sdcard");
                     if (browse_for_file == 0) {
