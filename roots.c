@@ -184,7 +184,7 @@ int try_mount(const char* device, const char* mount_point, const char* fs_type, 
     if (device == NULL || mount_point == NULL || fs_type == NULL)
         return -1;
     int ret = 0;
-#ifdef KYLE_TOUCH_RECOVERY
+#ifdef TARGET_SUPPORTS_EXFAT
 #include "/home/klaplante/recoverystuff/exfat1.c"
 #endif
     if (fs_options == NULL) {
@@ -295,7 +295,7 @@ int ensure_path_mounted_at_mount_point(const char* path, const char* mount_point
             return 0;
         if ((result = try_mount(v->device2, mount_point, v->fs_type2, v->fs_options2)) == 0)
             return 0;
-#ifdef KYLE_TOUCH_RECOVERY
+#ifdef TARGET_SUPPORTS_EXFAT
 #include "/home/klaplante/recoverystuff/exfat2.c"
 #endif
         return result;
