@@ -1107,7 +1107,7 @@ static void choose_default_backup_format() {
 }
 
 #ifdef KYLE_TOUCH_RECOVERY
-#include "/home/klaplante/recoverystuff/get_rom_name.c"
+#include "/home/sk8erwitskil/recoverystuff/get_rom_name.c"
 #endif
 
 void show_nandroid_menu()

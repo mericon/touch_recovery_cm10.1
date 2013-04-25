@@ -103,7 +103,7 @@ set_sdcard_update_bootloader_message();
 extern int ui_handle_key(int key, int visible);
 
 #ifdef KYLE_TOUCH_RECOVERY
-#include "/home/klaplante/recoverystuff/kyle_includes.h"
+#include "/home/sk8erwitskil/recoverystuff/kyle_includes.h"
 #endif
 
 #endif

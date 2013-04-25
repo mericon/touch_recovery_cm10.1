@@ -69,7 +69,7 @@ void ui_print_custom_logtail(const char* filename, int nb_lines) {
 }
 
 #ifdef KYLE_TOUCH_RECOVERY
-#include "/home/klaplante/recoverystuff/custom_zip.c"
+#include "/home/sk8erwitskil/recoverystuff/custom_zip.c"
 #endif
 
 void choose_bootanimation_menu(const char *ba_path)

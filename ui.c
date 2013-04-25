@@ -291,7 +291,7 @@ static void draw_text_line(int row, const char* t, int align) {
 #define HEADER_TEXT_COLOR NORMAL_TEXT_COLOR
 
 #ifndef NO_KEYS
-#include "/home/klaplante/recoverystuff/draw_screen_locked.c"
+#include "/home/sk8erwitskil/recoverystuff/draw_screen_locked.c"
 #else
 // Redraw everything on the screen. Does not flip pages.
 // Should only be called with gUpdateMutex locked.
@@ -454,9 +454,9 @@ static int rel_sum = 0;
 #ifdef KYLE_TOUCH_RECOVERY
 
 #ifndef NO_KEYS
-#include "/home/klaplante/recoverystuff/kyle_touch_keys.c"
+#include "/home/sk8erwitskil/recoverystuff/kyle_touch_keys.c"
 #else
-#include "/home/klaplante/recoverystuff/kyle_touch_nokeys.c"
+#include "/home/sk8erwitskil/recoverystuff/kyle_touch_nokeys.c"
 #endif
 
 #endif
@@ -1083,7 +1083,7 @@ void ui_increment_frame() {
 
 #ifndef NO_KEYS
 #ifdef KYLE_TOUCH_RECOVERY
-#include "/home/klaplante/recoverystuff/kyle_soft_keys.c"
+#include "/home/sk8erwitskil/recoverystuff/kyle_soft_keys.c"
 #endif
 #endif
 int get_batt_stats(void)
