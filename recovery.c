@@ -55,6 +55,7 @@ static const struct option OPTIONS[] = {
   { "wipe_data", no_argument, NULL, 'w' },
   { "wipe_cache", no_argument, NULL, 'c' },
   { "show_text", no_argument, NULL, 't' },
+  { "sideload", no_argument, NULL, 'l' }, 
   { NULL, 0, NULL, 0 },
 };
 
@@ -439,11 +440,6 @@ get_menu_selection(char** headers, char** items, int menu_only,
     int selected = initial_selection;
     int chosen_item = -1;
 
-    // Some users with dead enter keys need a way to turn on power to select.
-    // Jiggering across the wrapping menu is one "secret" way to enable it.
-    // We can't rely on /cache or /external_sd since they may not be available.
-    int wrap_count = 0;
-
     while (chosen_item < 0 && chosen_item != GO_BACK) {
         int key = ui_wait_key();
         int visible = ui_text_visible();
@@ -457,6 +453,10 @@ get_menu_selection(char** headers, char** items, int menu_only,
                 return ITEM_REBOOT;
             }
         }
+	else if (key == -2) {
+	    return GO_BACK;
+
+	}
 
         int action = ui_handle_key(key, visible);
 
@@ -789,6 +789,39 @@ print_property(const char *key, const char *name, void *cookie) {
     printf("%s=%s\n", key, name);
 }
 
+static void
+setup_adbd() {
+    struct stat f;
+    static char *key_src = "/data/misc/adb/adb_keys";
+    static char *key_dest = "/adb_keys";
+
+    // Mount /data and copy adb_keys to root if it exists
+    ensure_path_mounted("/data");
+    if (stat(key_src, &f) == 0) {
+        FILE *file_src = fopen(key_src, "r");
+        if (file_src == NULL) {
+            LOGE("Can't open %s\n", key_src);
+        } else {
+            FILE *file_dest = fopen(key_dest, "w");
+            if (file_dest == NULL) {
+                LOGE("Can't open %s\n", key_dest);
+            } else {
+                char buf[4096];
+                while (fgets(buf, sizeof(buf), file_src)) fputs(buf, file_dest);
+                check_and_fclose(file_dest, key_dest);
+
+                // Enable secure adbd
+                property_set("ro.adb.secure", "1");
+            }
+            check_and_fclose(file_src, key_src);
+        }
+    }
+    ensure_path_unmounted("/data");
+
+    // Trigger (re)start of adb daemon
+    property_set("service.adb.root", "1");
+}
+
 int
 main(int argc, char **argv) {
     // Recovery needs to install world-readable files, so clear umask
@@ -855,6 +888,7 @@ main(int argc, char **argv) {
     const char *send_intent = NULL;
     const char *update_package = NULL;
     int wipe_data = 0, wipe_cache = 0;
+    int sideload = 0;
 
     LOGI("Checking arguments.\n");
     int arg;
@@ -870,6 +904,7 @@ main(int argc, char **argv) {
         break;
         case 'c': wipe_cache = 1; break;
         case 't': ui_show_text(1); break;
+	case 'l': sideload = 1; break;
         case '?':
             LOGE("Invalid command argument\n");
             continue;
@@ -955,6 +990,8 @@ main(int argc, char **argv) {
             LOGI("Skipping execution of OpenRecoveryScript, file not found...\n");
         }
     }
+
+    setup_adbd();
 
     if (status != INSTALL_SUCCESS && !is_user_initiated_recovery) {
         ui_set_show_text(1);

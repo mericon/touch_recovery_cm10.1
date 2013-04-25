@@ -953,7 +953,7 @@ void show_extras_menu()
                 ui_print("CWM Base version: "EXPAND(CWM_BASE_VERSION)"\n");
                 //ui_print(EXPAND(BUILD_DATE)"\n");
                 ui_print("Build Date: %s at %s\n", __DATE__, __TIME__);
-		//ui_print("Build Date: 12/17/2012 6:20 pm\n");
+		//ui_print("Build Date: 04/23/2013 4:00 pm\n");
 		break;
 	    case 7:
 #ifdef KYLE_TOUCH_RECOVERY

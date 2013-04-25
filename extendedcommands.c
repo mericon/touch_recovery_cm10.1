@@ -236,7 +236,7 @@ char** gather_files(const char* directory, const char* fileExtensionOrDirectory,
                 char fullFileName[PATH_MAX];
                 strcpy(fullFileName, directory);
                 strcat(fullFileName, de->d_name);
-                stat(fullFileName, &info);
+                lstat(fullFileName, &info);
                 // make sure it is a directory
                 if (!(S_ISDIR(info.st_mode)))
                     continue;
@@ -504,15 +504,13 @@ int control_usb_storage_set_lun(Volume* vol, bool enable, const char *lun_file) 
     }
 }
 
-#define STRINGIFY(s) #s
-
 int control_usb_storage_for_lun(Volume* vol, bool enable) {
     static const char* lun_files[] = {
 #ifdef BOARD_UMS_LUNFILE
         BOARD_UMS_LUNFILE,
 #endif
 #ifdef TARGET_USE_CUSTOM_LUN_FILE_PATH
-        STRINGIFY(TARGET_USE_CUSTOM_LUN_FILE_PATH),
+	TARGET_USE_CUSTOM_LUN_FILE_PATH, 
 #endif
         "/sys/devices/platform/usb_mass_storage/lun%d/file",
         "/sys/class/android_usb/android0/f_mass_storage/lun/file",
@@ -590,7 +588,7 @@ void show_mount_usb_storage_menu()
         return;
 
     static char* headers[] = {  "USB Mass Storage device",
-                                "Leaving this menu unmount",
+                                "Leaving this menu unmounts",
                                 "your SD card from your PC.",
                                 "",
                                 NULL
@@ -1472,10 +1470,11 @@ void create_fstab()
     write_fstab_root("/cache", file);
     write_fstab_root("/data", file);
     write_fstab_root("/datadata", file);
-    write_fstab_root("/sdcard", file);
+    write_fstab_root("/emmc", file);
     write_fstab_root("/system", file);
-    write_fstab_root("/external_sd", file);
+    write_fstab_root("/sdcard", file);
     write_fstab_root("/sd-ext", file);
+    write_fstab_root("/external_sd", file);
     fclose(file);
     LOGI("Completed outputting fstab.\n");
 }
